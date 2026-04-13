@@ -1,268 +1,6 @@
-<!-- 
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diana Kovika Digital Gallery</title>
-<link rel="shortcut icon" href="TemplateData/favicon.ico">
-<style>
- * {
-   box-sizing: border-box;
- }
- body {
-   margin: 0;
-   font-family: Arial, sans-serif;
-   background: #111;
-   color: white;
- }
-header {
- background: #000;
- padding: 36px 20px 18px;
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: center;
- gap: 12px;
- text-align: center;
-}
-header img {
- height: 160px;
- width: auto;
- max-width: 320px;
- object-fit: contain;
- display: block;
-}
-header h1 {
- margin: 0;
- font-size: 20px;
- font-weight: 500;
- letter-spacing: 1.5px;
- color: #9a9a9a;
- font-family: Georgia, "Times New Roman", serif;
- text-transform: uppercase;
-}
- .hero {
-   text-align: center;
-   padding: 40px 20px 20px;
-   max-width: 1100px;
-   margin: 0 auto;
- }
- .hero h2 {
-   margin: 0 0 18px;
-   font-size: 56px;
-   letter-spacing: 2px;
- }
- .hero p {
-   margin: 0 auto;
-   max-width: 900px;
-   font-size: 22px;
-   line-height: 1.6;
-   color: #ddd;
- }
- #unity-wrapper {
-   max-width: 1100px;
-   margin: 32px auto 50px;
-   padding: 0 20px;
- }
- #unity-container {
-   position: relative;
-   width: 100%;
-   background: #1a1a1a;
-   border: 1px solid #333;
-   border-radius: 12px;
-   overflow: hidden;
-   box-shadow: 0 12px 40px rgba(0,0,0,0.35);
- }
- #unity-canvas {
-   width: 100%;
-   height: 680px;
-   display: block;
-   background: #222;
- }
- #unity-loading-bar {
-   position: absolute;
-   left: 50%;
-   top: 50%;
-   transform: translate(-50%, -50%);
-   width: 60%;
-   max-width: 420px;
-   text-align: center;
- }
- #unity-progress-bar-empty {
-   width: 100%;
-   height: 18px;
-   background: #333;
-   border-radius: 999px;
-   overflow: hidden;
- }
- #unity-progress-bar-full {
-   width: 0%;
-   height: 100%;
-   background: white;
- }
- #unity-warning {
-   position: absolute;
-   left: 12px;
-   right: 12px;
-   top: 12px;
-   z-index: 20;
- }
- #unity-footer {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   padding: 12px 16px;
-   background: #0b0b0b;
-   border-top: 1px solid #2a2a2a;
- }
- #unity-build-title {
-   font-size: 14px;
-   color: #bbb;
- }
- #unity-fullscreen-button {
-   background: white;
-   color: black;
-   border: none;
-   border-radius: 8px;
-   padding: 8px 14px;
-   cursor: pointer;
-   font-weight: bold;
- }
- #unity-fullscreen-button:hover {
-   background: #ddd;
- }
- @media (max-width: 900px) {
-   header {
-     padding: 22px 16px 18px;
-     gap: 10px;
-   }
-    header img {
-    height: 120px;
-    max-width: 220px;
-   }
-   header h1 {
-    font-size: 16px;
-    letter-spacing: 1px;
-   }
-   .hero h2 {
-     font-size: 40px;
-   }
-   .hero p {
-     font-size: 18px;
-   }
-   #unity-canvas {
-     height: 520px;
-   }
- }
-</style>
-</head>
-<body>
-<header>
-<img src="logo.png" alt="Gallery Logo">
-<h1>Diana Kovika Digital Gallery</h1>
-</header>
-<section class="hero">
-<h2>WELCOME!</h2>
-<p>
-     Welcome to my digital gallery. This space combines immersive 3D navigation,
-     historical artworks, and personal artistic expression in one interactive experience.
-     What makes it unique is the ability to walk through curated virtual rooms, encounter
-     artworks in space, and experience painting not as a flat collection, but as a living exhibition.
-</p>
-</section>
-<div id="unity-wrapper">
-<div id="unity-container" class="unity-desktop">
-<canvas id="unity-canvas" tabindex="-1"></canvas>
-<div id="unity-loading-bar">
-<div id="unity-progress-bar-empty">
-<div id="unity-progress-bar-full"></div>
-</div>
-</div>
-<div id="unity-warning"></div>
-<div id="unity-footer">
-<div id="unity-build-title">Diana Kovika Digital Gallery</div>
-<button id="unity-fullscreen-button">Fullscreen</button>
-</div>
-</div>
-</div>
-<script>
-   var container = document.querySelector("#unity-container");
-   var canvas = document.querySelector("#unity-canvas");
-   var loadingBar = document.querySelector("#unity-loading-bar");
-   var progressBarFull = document.querySelector("#unity-progress-bar-full");
-   var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-   var warningBanner = document.querySelector("#unity-warning");
-   function unityShowBanner(msg, type) {
-     function updateBannerVisibility() {
-       warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-     }
-     var div = document.createElement('div');
-     div.innerHTML = msg;
-     div.style.padding = "10px";
-     div.style.marginBottom = "8px";
-     div.style.borderRadius = "8px";
-     div.style.fontSize = "14px";
-     if (type == 'error') {
-       div.style.background = "rgba(255, 0, 0, 0.85)";
-     } else {
-       div.style.background = "rgba(255, 204, 0, 0.9)";
-       div.style.color = "#111";
-       setTimeout(function() {
-         if (warningBanner.contains(div)) {
-           warningBanner.removeChild(div);
-           updateBannerVisibility();
-         }
-       }, 5000);
-     }
-     warningBanner.appendChild(div);
-     updateBannerVisibility();
-   }
-   var buildUrl = "Build";
-   var loaderUrl = buildUrl + "/GALLERY222.loader.js";
-   var config = {
-     dataUrl: buildUrl + "/GALLERY222.data.unityweb",
-     frameworkUrl: buildUrl + "/GALLERY222.framework.js.unityweb",
-     codeUrl: buildUrl + "/GALLERY222.wasm.unityweb",
-     streamingAssetsUrl: "StreamingAssets",
-     companyName: "Diana Kovika",
-     productName: "Digital Gallery",
-     productVersion: "1.0",
-     showBanner: unityShowBanner,
-   };
-   if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-     var meta = document.createElement('meta');
-     meta.name = 'viewport';
-     meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-     document.getElementsByTagName('head')[0].appendChild(meta);
-     container.className = "unity-mobile";
-     canvas.className = "unity-mobile";
-     // Optional: lower resolution on mobile if needed
-     // config.devicePixelRatio = 1;
-   }
-   loadingBar.style.display = "block";
-   var script = document.createElement("script");
-   script.src = loaderUrl;
-   script.onload = () => {
-     createUnityInstance(canvas, config, (progress) => {
-       progressBarFull.style.width = (100 * progress) + "%";
-     }).then((unityInstance) => {
-       loadingBar.style.display = "none";
-       fullscreenButton.onclick = () => {
-         unityInstance.SetFullscreen(1);
-       };
-     }).catch((message) => {
-       alert(message);
-     });
-   };
-   document.body.appendChild(script);
-</script>
-</body>
-</html> -->
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en-us">
 <head>
 <meta charset="utf-8">
@@ -454,6 +192,342 @@ header h1 {
 </div>
 </div>
 </div>
+<script>
+   const container = document.querySelector("#unity-container");
+   const canvas = document.querySelector("#unity-canvas");
+   const loadingBar = document.querySelector("#unity-loading-bar");
+   const progressBarFull = document.querySelector("#unity-progress-bar-full");
+   const fullscreenButton = document.querySelector("#unity-fullscreen-button");
+   const warningBanner = document.querySelector("#unity-warning");
+   function unityShowBanner(msg, type) {
+     function updateBannerVisibility() {
+       warningBanner.style.display = warningBanner.children.length ? "block" : "none";
+     }
+     const div = document.createElement("div");
+     div.innerHTML = msg;
+     div.style.padding = "10px";
+     div.style.marginBottom = "8px";
+     div.style.borderRadius = "8px";
+     div.style.fontSize = "14px";
+     if (type === "error") {
+       div.style.background = "rgba(255, 0, 0, 0.85)";
+     } else {
+       div.style.background = "rgba(255, 204, 0, 0.9)";
+       div.style.color = "#111";
+       setTimeout(() => {
+         if (warningBanner.contains(div)) {
+           warningBanner.removeChild(div);
+           updateBannerVisibility();
+         }
+       }, 5000);
+     }
+     warningBanner.appendChild(div);
+     updateBannerVisibility();
+   }
+   const buildUrl = "Build";
+   const loaderUrl = buildUrl + "/GALLERY222.loader.js";
+   const config = {
+     dataUrl: buildUrl + "/GALLERY222.data.unityweb",
+     frameworkUrl: buildUrl + "/GALLERY222.framework.js.unityweb",
+     codeUrl: buildUrl + "/GALLERY222.wasm.unityweb",
+     streamingAssetsUrl: "StreamingAssets",
+     companyName: "Diana Kovika",
+     productName: "Digital Gallery",
+     productVersion: "1.0",
+     showBanner: unityShowBanner
+   };
+   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+   if (isMobile) {
+     const meta = document.createElement("meta");
+     meta.name = "viewport";
+     meta.content = "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+     document.head.appendChild(meta);
+     container.className = "unity-mobile";
+     canvas.className = "unity-mobile";
+     canvas.style.height = "78vh";
+   } else {
+     canvas.style.width = "100%";
+     canvas.style.height = "680px";
+   }
+   loadingBar.style.display = "block";
+   const script = document.createElement("script");
+   script.src = loaderUrl;
+   script.onload = () => {
+     createUnityInstance(canvas, config, (progress) => {
+       progressBarFull.style.width = (100 * progress) + "%";
+     }).then((unityInstance) => {
+       loadingBar.style.display = "none";
+       if (isIOS) {
+         fullscreenButton.style.display = "none";
+       } else {
+         fullscreenButton.onclick = () => {
+           unityInstance.SetFullscreen(1);
+         };
+       }
+     }).catch((message) => {
+       alert(message);
+     });
+   };
+   document.body.appendChild(script);
+</script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diana Kovika Digital Gallery</title>
+<link rel="shortcut icon" href="TemplateData/favicon.ico">
+<style>
+   * {
+     box-sizing: border-box;
+   }
+   body {
+     margin: 0;
+     font-family: Arial, sans-serif;
+     background: #111;
+     color: white;
+   }
+   header {
+     background: #000;
+     padding: 42px 20px 64px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+   }
+   header img {
+     height: 190px;
+     width: auto;
+     max-width: 360px;
+     object-fit: contain;
+     display: block;
+     margin-bottom: 18px;
+   }
+   header h1 {
+     margin: 0;
+     font-size: 19px;
+     font-weight: 500;
+     letter-spacing: 1.8px;
+     color: #8f8f8f;
+     font-family: Georgia, "Times New Roman", serif;
+     text-transform: uppercase;
+   }
+   .hero {
+     text-align: center;
+     padding: 50px 20px 20px;
+     max-width: 1100px;
+     margin: 0 auto;
+   }
+   .hero h2 {
+     margin: 0 0 24px;
+     font-size: 56px;
+     letter-spacing: 2px;
+   }
+   .hero p {
+     margin: 0 auto;
+     max-width: 900px;
+     font-size: 22px;
+     line-height: 1.7;
+     color: #ddd;
+   }
+   #unity-wrapper {
+     max-width: 1100px;
+     margin: 40px auto 60px;
+     padding: 0 20px;
+   }
+   #unity-container {
+     position: relative;
+     width: 100%;
+     background: #1a1a1a;
+     border: 1px solid #333;
+     border-radius: 14px;
+     overflow: hidden;
+     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+   }
+   #unity-canvas {
+     width: 100%;
+     height: 680px;
+     display: block;
+     background: #222;
+   }
+   #unity-loading-bar {
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     width: 60%;
+     max-width: 420px;
+     text-align: center;
+   }
+   #unity-progress-bar-empty {
+     width: 100%;
+     height: 18px;
+     background: #333;
+     border-radius: 999px;
+     overflow: hidden;
+   }
+   #unity-progress-bar-full {
+     width: 0%;
+     height: 100%;
+     background: white;
+   }
+   #unity-warning {
+     position: absolute;
+     left: 12px;
+     right: 12px;
+     top: 12px;
+     z-index: 20;
+   }
+   #unity-footer {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 14px 18px;
+     background: #0b0b0b;
+     border-top: 1px solid #2a2a2a;
+   }
+   #unity-build-title {
+     font-size: 14px;
+     color: #bbb;
+   }
+   #unity-fullscreen-button {
+     background: white;
+     color: black;
+     border: none;
+     border-radius: 10px;
+     padding: 10px 16px;
+     cursor: pointer;
+     font-weight: bold;
+   }
+   #unity-fullscreen-button:hover {
+     background: #ddd;
+   }
+   .site-footer {
+     margin-top: 80px;
+     padding: 50px 20px 60px;
+     background: #000;
+     border-top: 1px solid #222;
+     text-align: center;
+   }
+   .linkedin-link {
+     display: inline-flex;
+     align-items: center;
+     gap: 14px;
+     text-decoration: none;
+     color: #cfcfcf;
+     font-size: 18px;
+     letter-spacing: 0.5px;
+     transition: opacity 0.25s ease;
+   }
+   .linkedin-link img {
+     height: 32px;
+     width: 32px;
+     transition: transform 0.2s ease, opacity 0.2s ease;
+   }
+   .linkedin-link:hover {
+     opacity: 0.88;
+   }
+   .linkedin-link:hover img {
+     transform: scale(1.12);
+     opacity: 0.9;
+   }
+   .copyright {
+     margin-top: 18px;
+     font-size: 13px;
+     color: #666;
+     letter-spacing: 1px;
+   }
+   @media (max-width: 900px) {
+     header {
+       padding: 32px 16px 52px;
+     }
+     header img {
+       height: 135px;
+       max-width: 240px;
+       margin-bottom: 18px;
+     }
+     header h1 {
+       font-size: 15px;
+       letter-spacing: 1.1px;
+     }
+     .hero {
+       padding: 42px 20px 20px;
+     }
+     .hero h2 {
+       font-size: 40px;
+     }
+     .hero p {
+       font-size: 18px;
+       line-height: 1.6;
+     }
+     #unity-canvas {
+       height: 520px;
+     }
+     #unity-footer {
+       padding: 12px 14px;
+     }
+     #unity-build-title {
+       font-size: 13px;
+     }
+     .linkedin-link {
+       font-size: 16px;
+     }
+     .linkedin-link img {
+       height: 28px;
+       width: 28px;
+     }
+   }
+</style>
+</head>
+<body>
+<header>
+<img src="logo.png" alt="Gallery Logo">
+<h1>Diana Kovika Digital Gallery</h1>
+</header>
+<section class="hero">
+<h2>WELCOME!</h2>
+<p>
+     Welcome to my digital gallery. This space combines immersive 3D navigation,
+     historical artworks, and personal artistic expression in one interactive experience.
+     What makes it unique is the ability to walk through curated virtual rooms, encounter
+     artworks in space, and experience painting not as a flat collection, but as a living exhibition.
+</p>
+</section>
+<div id="unity-wrapper">
+<div id="unity-container" class="unity-desktop">
+<canvas id="unity-canvas" tabindex="-1"></canvas>
+<div id="unity-loading-bar">
+<div id="unity-progress-bar-empty">
+<div id="unity-progress-bar-full"></div>
+</div>
+</div>
+<div id="unity-warning"></div>
+<div id="unity-footer">
+<div id="unity-build-title">Diana Kovika Digital Gallery</div>
+<button id="unity-fullscreen-button">Fullscreen</button>
+</div>
+</div>
+</div>
+<footer class="site-footer">
+<a
+     href="https://www.linkedin.com/in/diana-kovika-357663386?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="linkedin-link"
+>
+<img src="linkedin.svg" alt="LinkedIn">
+<span>View my LinkedIn</span>
+</a>
+<div class="copyright">
+     © 2026 Diana Kovika
+</div>
+</footer>
 <script>
    const container = document.querySelector("#unity-container");
    const canvas = document.querySelector("#unity-canvas");
