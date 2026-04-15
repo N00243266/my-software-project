@@ -373,19 +373,19 @@ color: #8f8f8f;
 font-family: Georgia, "Times New Roman", serif;
 text-transform: uppercase;
 }
-/* HERO */
-.hero {
+/* HERO + NAVIGATION SHARED STYLE */
+.section-block {
 text-align: center;
 padding: 50px 20px 20px;
 max-width: 1100px;
 margin: 0 auto;
 }
-.hero h2 {
+.section-block h2 {
 margin: 0 0 24px;
 font-size: 56px;
 letter-spacing: 2px;
 }
-.hero p {
+.section-block p {
 margin: 0 auto;
 max-width: 900px;
 font-size: 22px;
@@ -395,7 +395,7 @@ color: #ddd;
 /* UNITY WRAPPER */
 #unity-wrapper {
 max-width: 1100px;
-margin: 40px auto 30px;
+margin: 40px auto 40px;
 padding: 0 20px;
 }
 #unity-container {
@@ -463,25 +463,6 @@ font-weight: bold;
 #unity-fullscreen-button:hover {
 background: #ddd;
 }
-/* NAVIGATION PANEL */
-.gallery-navigation {
-max-width: 760px;
-margin: 50px auto 10px;
-padding: 0 20px;
-text-align: center;
-font-family: Georgia, "Times New Roman", serif;
-}
-.gallery-navigation h3 {
-font-size: 26px;
-letter-spacing: 1px;
-margin-bottom: 18px;
-}
-.gallery-navigation p {
-font-size: 19px;
-line-height: 1.7;
-color: #cfcfcf;
-margin-bottom: 14px;
-}
 /* FOOTER */
 .site-footer {
 margin-top: 80px;
@@ -497,7 +478,7 @@ gap: 14px;
 text-decoration: none;
 color: #cfcfcf;
 font-size: 18px;
-transition: opacity 0.25s ease;
+transition: opacity .25s ease;
 }
 .linkedin-link img {
 height: 32px;
@@ -516,11 +497,12 @@ letter-spacing: 1px;
 /* MOBILE */
 @media (max-width: 900px) {
 header img { height: 135px; }
-.hero h2 { font-size: 40px; }
-.hero p { font-size: 18px; }
+.section-block h2 { font-size: 40px; }
+.section-block p {
+font-size: 18px;
+line-height: 1.6;
+}
 #unity-canvas { height: 520px; }
-.gallery-navigation h3 { font-size: 22px; }
-.gallery-navigation p { font-size: 17px; }
 }
 </style>
 </head>
@@ -529,7 +511,9 @@ header img { height: 135px; }
 <img src="logo.png" alt="Gallery Logo">
 <h1>Diana Kovika Digital Gallery</h1>
 </header>
-<section class="hero">
+
+<!-- INTRO -->
+<section class="section-block">
 <h2>WELCOME!</h2>
 <p>
 Welcome to my digital gallery. This space combines immersive 3D navigation,
@@ -538,6 +522,8 @@ What makes it unique is the ability to walk through curated virtual rooms, encou
 artworks in space, and experience painting not as a flat collection, but as a living exhibition.
 </p>
 </section>
+
+<!-- UNITY VIEWER -->
 <div id="unity-wrapper">
 <div id="unity-container" class="unity-desktop">
 <canvas id="unity-canvas"></canvas>
@@ -553,19 +539,22 @@ artworks in space, and experience painting not as a flat collection, but as a li
 </div>
 </div>
 </div>
+
 <!-- NAVIGATION TEXT -->
-<section class="gallery-navigation">
-<h3>Gallery Navigation</h3>
+<section class="section-block">
+<h2>HOW TO NAVIGATE</h2>
 <p>
 Move through the gallery using <strong>W, A, S, D</strong> and look around with your mouse.
 On mobile devices, use the <strong>left joystick to walk</strong> and drag on the
 <strong>right side of the screen</strong> to change your view.
 </p>
 <p>
-Approach each artwork to reveal its title and description.
+Approach each artwork to reveal its <strong>title and description</strong>.
 The exhibition unfolds through movement — step closer to encounter each piece in full.
 </p>
 </section>
+
+<!-- FOOTER -->
 <footer class="site-footer">
 <a href="https://www.linkedin.com/in/diana-kovika-357663386"
 target="_blank"
@@ -577,6 +566,7 @@ class="linkedin-link">
 © 2026 Diana Kovika
 </div>
 </footer>
+
 <script>
 const container = document.querySelector("#unity-container");
 const canvas = document.querySelector("#unity-canvas");
